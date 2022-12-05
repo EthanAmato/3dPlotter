@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { tempData } from './data/tempData'
+import { useState, useEffect } from 'react';
+import { Plotter } from './components/Plotter';
+import { PlotInput } from './components/PlotInput';
+  
 function App() {
+  const [data, setData] = useState();
+  const [plotter, setPlotter] = useState(<h3>Please upload an excel file</h3>);
+  useEffect(() => {
+    if(data) {
+      setPlotter(<Plotter data={data} />)
+    }
+  }, [data])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <PlotInput setData = {setData} />
+      {plotter}
+    </>
   );
 }
 
