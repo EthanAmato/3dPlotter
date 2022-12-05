@@ -1,7 +1,10 @@
 import '../styles/input.css';
 import readXlsxFile from 'read-excel-file';
+import { useRef } from 'react';
 
 export function PlotInput({setData}) {
+    const titleRef = useRef();
+
     function handleSubmit(e) {
         e.preventDefault();
         const file = document.getElementById("myFile").files[0]
@@ -10,6 +13,7 @@ export function PlotInput({setData}) {
             let transposedData = res[0].map((_, colIndex) => res.map(row => row[colIndex]));
             setData(
                 {
+                    title: titleRef.current.value,
                     colNames: colNames,
                     x: transposedData[0],
                     y: transposedData[1],
@@ -24,10 +28,14 @@ export function PlotInput({setData}) {
 
     return (
         <>
+        <div className='form-wrapper'>
             <form className='center' onSubmit={handleSubmit}>
+                <label for="title">Graph Title</label>
+                <input id="title" ref={titleRef}/>
                 <input type="file" id="myFile" name="filename"/>
                 <input type="submit"/>
             </form>
+        </div>
         </>
     );
 }

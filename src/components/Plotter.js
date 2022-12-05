@@ -1,27 +1,24 @@
 import Plot from 'react-plotly.js';
 import '../styles/input.css';
-
+function getColor(p) {
+    switch(p) {
+        case "Sweet":
+            return "red";
+        case "Savory":
+            return "yellow";
+        case "Sour":
+            return "orange";
+        case "Bitter":
+            return "green";
+        case "Umami":
+            return "blue";
+        default:
+            return "black"
+    }
+}
 export function Plotter(props) {
 
-    function getColor(p) {
-        switch (p) {
-            case "Sweet":
-                return "red";
-                break;
-            case "Savory":
-                return "yellow";
-                break;
-            case "Sour":
-                return "orange";
-                break;
-            case "Bitter":
-                return "green";
-                break;
-            case "Umami":
-                return "blue";
-                break;
-        }
-    }
+    
 
     const data = props.data;
     console.log(data)
@@ -42,7 +39,6 @@ export function Plotter(props) {
                             type: "scatter3d",
                             text: data.names,
                             hovertext: data.desc,
-                            colorscale: 'YlOrRd',
                             textinfo: "text+value",
                             hoverinfo: "all",
                         }
@@ -51,11 +47,11 @@ export function Plotter(props) {
                 layout={{
                     width: 800,
                     height: 800,
-                    title: "Random 3d Points",
+                    title: data.title,
                     scene: {
-                        xaxis:{title: 'X AXIS TITLE'},
-                        yaxis:{title: 'Y AXIS TITLE'},
-                        zaxis:{title: 'Z AXIS TITLE'},
+                        xaxis:{title: data.colNames[0]},
+                        yaxis:{title: data.colNames[1]},
+                        zaxis:{title: data.colNames[2]},
                         },
                 }}
 
