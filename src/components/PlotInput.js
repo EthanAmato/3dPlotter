@@ -19,7 +19,7 @@ export function PlotInput({setData}) {
                     y: transposedData[1],
                     z: transposedData[2],
                     names: transposedData[3],
-                    desc: transposedData[4]
+                    // desc: transposedData[4]
                 }
             )
         })

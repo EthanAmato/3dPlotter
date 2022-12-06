@@ -1,16 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createRef, forwardRef } from 'react';
 import { Plotter } from './components/Plotter';
 import { PlotInput } from './components/PlotInput';
+import { DownloadToHTML } from './components/DownloadToHTML';
 import './styles/index.css'
 function App() {
   const [data, setData] = useState();
+  const [plotRef, setPlotRef] = useState();
   const [plotter, setPlotter] = useState(<h3>Please upload an excel file</h3>);
   useEffect(() => {
     if(data) {
-      setPlotter(<Plotter data={data} />)
+      setPlotter(<Plotter setRef={setPlotRef} data={data} />)
+      console.log(plotRef)
     }
   }, [data])
   
+
+  function handleDownload() {
+    console.log(plotRef.current)
+  }
+
+
   return (
     <>
       <h1 className='title'>Enter an XLSX File</h1>
@@ -51,6 +60,8 @@ function App() {
       </table>
       <PlotInput setData = {setData} />
       {plotter}
+      <button onClick={() => console.log(plotRef.current)}>Print</button>
+      {plotter ? <DownloadToHTML plot={plotRef.current} /> : <></>}
     </>
   );
 }
