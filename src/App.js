@@ -1,4 +1,4 @@
-import { useState, useEffect, createRef, forwardRef } from 'react';
+import { useState, useEffect} from 'react';
 import { Plotter } from './components/Plotter';
 import { PlotInput } from './components/PlotInput';
 import { DownloadToHTML } from './components/DownloadToHTML';
@@ -11,12 +11,16 @@ function App() {
 
 
   useEffect(() => {
-    console.log(plotRef)
-    if(plotRef) {
+    if (plotRef) {
       setHtmlLink(<DownloadToHTML plot={plotRef} />)
     }
   }, [plotRef])
-  
+
+  function resetPlot() {
+    setData()
+    setPlotRef()
+    setHtmlLink()
+  }
 
   return (
     <>
@@ -67,12 +71,17 @@ function App() {
           <Row>
             <PlotInput setData={setData} />
           </Row>
+          <Row className='w-75 m-auto justify-center'>
+            <Col className='p-0'>
+            <Button variant='danger' onClick={resetPlot}>Reset</Button>
+            </Col>
+          </Row>
           <Row className='m-auto'>
             {data ? <Plotter setRef={setPlotRef} data={data} /> : <></>}
           </Row>
-          <button onClick={() => console.log(plotRef.current)}>Print</button>
+          {/* <button onClick={() => console.log(plotRef.current)}>Print</button> */}
           {htmlLink ? htmlLink : <></>}
-          
+
         </Stack>
       </Container>
     </>

@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react"
 import { Button } from "react-bootstrap"
 
 export function DownloadToHTML(props) {
   function handleClick() {
-    console.log(props.plot.current.props)
     async function getPlotlyScript() {
       // fetch
       const plotlyRes = await fetch('https://cdn.plot.ly/plotly-latest.js')
@@ -48,7 +46,7 @@ export function DownloadToHTML(props) {
       // Create downloader
       const downloader = document.createElement('a')
       downloader.href = url
-      downloader.download = 'export.html'
+      downloader.download = props.plot.current.props.layout.title.text ? `${props.plot.current.props.layout.title.text}.html` : 'export.html'
 
       // Trigger click
       downloader.click()

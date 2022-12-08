@@ -1,6 +1,5 @@
-import { createRef, forwardRef, useEffect, useRef, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Row } from 'react-bootstrap';
 
 export function Plotter({ setRef, data }) {
     const [plot, setPlot] = useState();
@@ -8,7 +7,6 @@ export function Plotter({ setRef, data }) {
     const plotRef = createRef();
 
     useEffect(() => {
-        console.log(data)
         if (data.vectorLines) {
 
             function generateVectors() {
@@ -16,9 +14,9 @@ export function Plotter({ setRef, data }) {
                 data.traces.forEach((point) => {
                     traces.push(
                         {
-                            x: [0, point[0]],
-                            y: [0, point[1]],
-                            z: [0, point[2]],
+                            x: [data.originCoords[0], point[0]],
+                            y: [data.originCoords[1], point[1]],
+                            z: [data.originCoords[2], point[2]],
                             type: "scatter3d",
                             mode:"lines+markers+text",
                             marker: {
@@ -36,15 +34,14 @@ export function Plotter({ setRef, data }) {
                         }
                     )
                 })
-                console.log(traces)
                 return traces
             }
             generateVectors();
             setPlot(<Plot ref={plotRef}
                 data={generateVectors()}
                 layout={{
-                    width: 800,
-                    height: 800,
+                    width: data.plotSize.width,
+                    height: data.plotSize.height,
                     title: data.title,
                     scene: {
                         xaxis: { title: data.colNames[0] },
@@ -77,8 +74,8 @@ export function Plotter({ setRef, data }) {
                     ]
                 }
                 layout={{
-                    width: 800,
-                    height: 800,
+                    width: data.plotSize.width,
+                    height: data.plotSize.height,
                     title: data.title,
                     scene: {
                         xaxis: { title: data.colNames[0] },
@@ -95,7 +92,6 @@ export function Plotter({ setRef, data }) {
     }, [])
 
     function setRefAndPlot() {
-        // console.log(plot.ref)
         return plot
     }
 
