@@ -1,25 +1,26 @@
+import { useState, useEffect } from "react"
+import { Button } from "react-bootstrap"
+
 export function DownloadToHTML(props) {
+  function handleClick() {
+    console.log(props.plot.current.props)
+    async function getPlotlyScript() {
+      // fetch
+      const plotlyRes = await fetch('https://cdn.plot.ly/plotly-latest.js')
+      // get response as text
+      return await plotlyRes.text()
+    }
+    function getChartState() {
+      return {
+        data: props.plot.current.props.data, // current data
+        layout: props.plot.current.props.layout // current layout
+      }
+    }
+    async function getHtml() {
+      const plotlyModuleText = await getPlotlyScript()
+      const state = getChartState()
 
-    function handleClick() {
-        async function getPlotlyScript() {
-            // fetch
-            const plotlyRes = await fetch('https://cdn.plot.ly/plotly-latest.js')
-            // get response as text
-            return await plotlyRes.text()
-        }
-        function getChartState() {
-            const el = props.plot.props
-            console.log(el)
-            return {
-                data: el.data, // current data
-                layout: el.layout // current layout
-            }
-        }
-        async function getHtml() {
-            const plotlyModuleText = await getPlotlyScript()
-            const state = getChartState()
-
-            return `
+      return `
                 <head>
                   <meta charset="utf-8" />
                 </head>
@@ -38,28 +39,31 @@ export function DownloadToHTML(props) {
                   )
               <\/script>
             `
-        }
-        async function exportToHtml () {
-            // Create URL
-            const blob = new Blob([await getHtml()], { type: 'text/html' })
-            const url = URL.createObjectURL(blob)
-          
-            // Create downloader
-            const downloader = document.createElement('a')
-            downloader.href = url
-            downloader.download = 'export.html'
-          
-            // Trigger click
-            downloader.click()
-          
-            // Clean up
-            URL.revokeObjectURL(url)
-          }
-        
-          exportToHtml()
-        getChartState()
+    }
+    async function exportToHtml() {
+      // Create URL
+      const blob = new Blob([await getHtml()], { type: 'text/html' })
+      const url = URL.createObjectURL(blob)
+
+      // Create downloader
+      const downloader = document.createElement('a')
+      downloader.href = url
+      downloader.download = 'export.html'
+
+      // Trigger click
+      downloader.click()
+
+      // Clean up
+      URL.revokeObjectURL(url)
     }
 
-
-    return <button onClick={handleClick}>Download To HTML</button>
+    exportToHtml()
+  }
+  if (props.plot) {
+    return(
+      <Button className="w-50 m-auto" onClick={handleClick}>Download As HTML</Button>
+    )
+  } else {
+    return <></>
+  }
 }
